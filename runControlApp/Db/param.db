@@ -1,0 +1,268 @@
+##############################################################################
+# __Author__        =   Alireza Panna, NIH/NHLBI
+# __status__        =   Stable
+# __date__          =   11/01/2015
+# __version__       =   1.4
+# __to-do__         =
+# __update-log__    =   01/07/2015: added new record $(P):VERFIY_RBV 
+# 				    	01/10/2015: added records related to verify_settings.st
+#				    	08/05/2016: added new analog records $(P):SS_SAMPLE_DIST 
+#							 		,$(P):SS_SAMPLE_DIST_RBV, 
+#							 		$(P):SAMP_PIXEL_SIZE_X_RBV, 
+#							 		$(P):SAMP_PIXEL_SIZE_Y_RBV. Bump to v1.4
+#						08/07/2016: Rename to param.db
+##############################################################################
+
+record(ao, "$(P):CAM_PIXEL_SIZE_X")
+{
+	field(DESC, "Detector pixel size")
+	field(DTYP, "Soft Channel")
+	field(PREC, "3")
+  	field(OUT, "$(P):CAM_PIXEL_SIZE_X_RBV  CA PP NMS")
+  	field(PINI, "YES")
+}
+
+record(ai, "$(P):CAM_PIXEL_SIZE_X_RBV") 
+{
+	field(DTYP, "Soft Channel")
+	field(PREC, "3")
+	field(EGU, "um")
+	field(SCAN, "Passive")
+	field(FLNK, "$(P):CALC_PIXEL_SIZE_X")
+}
+
+record(ai, "$(P):SAMP_PIXEL_SIZE_X_RBV") 
+{
+	field(DTYP, "Soft Channel")
+	field(PREC, "6")
+	field(EGU, "um")
+	field(INP, "$(P):CALC_PIXEL_SIZE_X.VAL")
+	field(SCAN, ".1 second")
+}
+
+record(ai, "$(P):SAMP_PIXEL_SIZE_Y_RBV") 
+{
+	field(DTYP, "Soft Channel")
+	field(PREC, "6")
+	field(EGU, "um")
+	field(INP, "$(P):CALC_PIXEL_SIZE_Y.VAL")
+	field(SCAN, ".1 second")
+}
+
+record(calcout, "$(P):CALC_PIXEL_SIZE_X") 
+{
+  	field (INPA,"$(P):CAM_PIXEL_SIZE_X_RBV")
+  	field (INPB,"$(P):SS_DET_DIST_RBV")
+  	field (INPC,"$(P):SS_SAMPLE_DIST_RBV")
+  	field (CALC, "B=0 ? 0 : A*(C/B)")
+  	field (OUT, "$(P):SAMP_PIXEL_SIZE_X_RBV")
+  	field (OOPT,"Every Time")
+	field (PINI, "YES")
+	field (FLNK, "$(P):CALC_PIXEL_SIZE_Y")
+} 
+
+record(calcout, "$(P):CALC_PIXEL_SIZE_Y") 
+{
+  	field (INPA,"$(P):CAM_PIXEL_SIZE_X_RBV")
+  	field (INPB,"$(P):SS_DET_DIST_RBV")
+  	field (INPC,"$(P):SS_SAMPLE_DIST_RBV")
+	field (INPD,"$(P):SINE_PHOSPHOR_RBV")
+  	field (CALC, "B=0 ? 0 : A*D*(C/B)")
+  	field (OUT, "$(P):SAMP_PIXEL_SIZE_Y_RBV")
+  	field (OOPT,"Every Time")
+	field (PINI, "YES")
+}
+
+record(stringout, "$(P):SAMPLE_ID")
+{
+	field(DESC, "Sample ID/Information")
+    field(DTYP, "Soft Channel")
+    field(OUT, "$(P):SAMPLE_ID_RBV CA PP NMS")
+  	field(PINI, "YES")
+}
+
+record(stringin, "$(P):SAMPLE_ID_RBV")
+{
+	field(DTYP, "Soft Channel")
+	field(SCAN, "Passive")
+}
+
+record(ao, "$(P):SINE_PHOSPHOR")
+{
+	field(DESC, "beam incidence sine angle")
+	field(DTYP, "Soft Channel")
+	field(PREC, "4")
+	field(OUT, "$(P):SINE_PHOSPHOR_RBV CA PP NMS")
+  	field(PINI, "YES")
+}
+
+record(ai, "$(P):SINE_PHOSPHOR_RBV") 
+{
+	field(DTYP, "Soft Channel")
+	field(PREC, "4")
+	field(EGU, "")
+	field(SCAN, "Passive")
+	field(FLNK, "$(P):CALC_PIXEL_SIZE_Y")
+}
+
+record(ao, "$(P):SS_G0_DIST")
+{
+	field(DESC, "source slit to g0 distance")
+	field(DTYP, "Soft Channel")
+	field(PREC, "2")
+	field(OUT, "$(P):SS_G0_DIST_RBV CA PP NMS")
+  	field(PINI, "YES")
+}
+
+record(ai, "$(P):SS_G0_DIST_RBV") 
+{
+	field(DTYP, "Soft Channel")
+	field(PREC, "2")
+	field(EGU, "mm")
+	field(SCAN, "Passive")
+}
+
+record(ao, "$(P):SS_G1_DIST")
+{
+	field(DESC, "source slit to g1 distance")
+	field(DTYP, "Soft Channel")
+	field(PREC, "2")
+	field(OUT, "$(P):SS_G1_DIST_RBV CA PP NMS")
+  	field(PINI, "YES")
+}
+
+record(ai, "$(P):SS_G1_DIST_RBV") 
+{
+	field(DTYP, "Soft Channel")
+	field(PREC, "2")
+	field(EGU, "mm")
+	field(SCAN, "Passive")
+}
+
+record(ao, "$(P):SS_SAMPLE_DIST")
+{
+	field(DESC, "source slit to sample distance")
+	field(DTYP, "Soft Channel")
+	field(PREC, "2")
+	field(OUT, "$(P):SS_SAMPLE_DIST_RBV CA PP NMS")
+  	field(PINI, "YES")
+}
+
+record(ai, "$(P):SS_SAMPLE_DIST_RBV") 
+{
+	field(DTYP, "Soft Channel")
+	field(PREC, "2")
+	field(EGU, "mm")
+	field(SCAN, "Passive")
+	field(FLNK, "$(P):CALC_PIXEL_SIZE_X")
+}
+
+record(ao, "$(P):SS_G2_DIST")
+{
+	field(DESC, "source slit to g2 distance")
+	field(DTYP, "Soft Channel")
+	field(PREC, "2")
+	field(OUT, "$(P):SS_G2_DIST_RBV CA PP NMS")
+  	field(PINI, "YES")
+}
+
+record(ai, "$(P):SS_G2_DIST_RBV") 
+{
+	field(DTYP, "Soft Channel")
+	field(PREC, "2")
+	field(EGU, "mm")
+	field(SCAN, "Passive")
+}
+
+record(ao, "$(P):SS_DET_DIST")
+{
+	field(DESC, "source slit to phosphor distance")
+	field(DTYP, "Soft Channel")
+	field(PREC, "2")
+	field(OUT, "$(P):SS_DET_DIST_RBV CA PP NMS")
+  	field(PINI, "YES")
+}
+
+record(ai, "$(P):SS_DET_DIST_RBV") 
+{
+	field(DTYP, "Soft Channel")
+	field(PREC, "2")
+	field(EGU, "mm")
+	field(SCAN, "Passive")
+	field(FLNK, "$(P):CALC_PIXEL_SIZE_X")
+}
+
+record(stringout, "$(P):PHOSPHOR_TYPE")
+{
+	field(DESC, "Phosphor Information")
+    field(DTYP, "Soft Channel")
+    field(OUT, "$(P):PHOSPHOR_TYPE_RBV CA PP NMS")
+  	field(PINI, "YES")
+}
+
+record(stringin, "$(P):PHOSPHOR_TYPE_RBV")
+{
+	field(DTYP, "Soft Channel")
+	field(SCAN, "Passive")
+}
+
+record(stringout, "$(P):INVESTIGATOR")
+{
+	field(DESC, "Researcher who performed acquisition")
+    field(DTYP, "Soft Channel")
+    field(OUT, "$(P):INVESTIGATOR_RBV CA PP NMS")
+  	field(PINI, "YES")
+}
+
+record(stringin, "$(P):INVESTIGATOR_RBV")
+{
+	field(DTYP, "Soft Channel")
+	field(SCAN, "Passive")
+}
+
+record(stringout, "$(P):METADATA_1")
+{
+    field(DESC, "Additional Comments/Information")
+    field(DTYP, "Soft Channel")
+    field(OUT,  "$(P):METADATA_1_RBV CA PP NMS")
+    field(PINI, "YES")
+}
+
+record(stringin, "$(P):METADATA_1_RBV")
+{
+	field(DTYP, "Soft Channel")
+	field(SCAN, "Passive")
+}
+
+record(bo, "$(P):VERIFY") {
+  	field(DESC, "Verify Settings")
+  	field(DTYP, "Soft Channel")
+  	field(ZNAM, "Done")
+  	field(ONAM, "Busy")
+  	field(VAL, "1")
+  	field(PINI, "YES")
+}
+
+record(mbbi, "$(P):VERIFY_RBV")
+{
+    field(DESC, "Retrieve Message type")
+    field(DTYP, "Soft Channel")
+	field(VAL, "0")
+    field(ZRST, "OK")
+    field(ZRVL, "0")
+    field(ZRSV, "NO_ALARM")
+    field(ONST, "Warning")
+    field(ONVL, "1")
+    field(ONSV, "MINOR")
+    field(TWST, "Error")
+    field(TWVL, "2")
+    field(TWSV, "MAJOR")
+	field(PINI, "YES")
+}
+
+record(waveform, "$(P):MESSAGE") {
+  	field(DESC, "Error/Warning Message output")
+  	field(DTYP, "Soft Channel")
+  	field(NELM, "5120")
+  	field(FTVL, "UCHAR")
+}
